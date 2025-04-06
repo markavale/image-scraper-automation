@@ -98,15 +98,12 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
-<<<<<<< HEAD
 # UV
 #   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
 #uv.lock
 
-=======
->>>>>>> 41ce0df29ee704b92bf0d5ed0189e3fbd7d9038a
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
@@ -173,13 +170,10 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
-<<<<<<< HEAD
 
 # Ruff stuff:
 .ruff_cache/
 
 # PyPI configuration file
 .pypirc.qodo
-=======
->>>>>>> 41ce0df29ee704b92bf0d5ed0189e3fbd7d9038a
 .qodo

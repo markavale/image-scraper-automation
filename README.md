@@ -121,3 +121,5 @@ following attributes: `pid`, `status`, `uptime`, `cpu_usage`, `mem_usage`, `ip`,
 ```python
 windscribe.status()
 ```
+# image-scraper-automation
+This repo is for gathering media from geosnap and removing watermark using dewatermark ai

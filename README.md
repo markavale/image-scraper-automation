@@ -1,125 +1,75 @@
-# Python-Windscribe
+# Image Scraper Automation Pipeline
 
-## Intro
+## Overview
 
-I had purchased a lifetime subscription to Windscribe a few years ago and 
-recently noticed that they had released a CLI. Being interested in web crawling,
-I threw together this basic CLI wrapper in an afternoon to use on some of my 
-personal projects. I plan on making updates soon to cover more of the CLI.
+This repository contains an automated pipeline for scraping images from GeoSnapshot (geosnapshot.com) and removing watermarks using dewatermark.ai. The system uses a combination of web scraping, browser automation, and VPN rotation to efficiently collect and process images.
 
-**NOTE:** *I am in no way affiliated with Windscribe.*
+## Key Features
 
-## Install
+- **GeoSnapshot Scraper**: Search for events and collect photos based on bib numbers
+- **Automatic Image Processing**: Downloads raw images and removes watermarks using dewatermark.ai
+- **VPN Integration**: Uses Windscribe VPN with IP rotation to avoid rate limits
+- **Browser Automation**: Utilizes Playwright for reliable web interaction
+- **Robust Error Handling**: Includes retry mechanisms, failure detection, and comprehensive logging
 
-```bash
-$ pip install python-windscribe
-```
-or
-```bash
-$ python setup.py install
-```
+## System Components
+
+- `PhotoProcessor`: Main orchestrator that coordinates the entire pipeline
+- `Scraper`/`SearchScraperStrategy`: Locates events on GeoSnapshot based on keywords
+- `PhotoCollector`: Gathers photo metadata from GeoSnapshot API
+- `PhotoManager`: Handles downloading and organizing raw images
+- `Dewatermarker`: Processes images through dewatermark.ai to remove watermarks
+- `VPNManager`: Controls Windscribe VPN for IP rotation to avoid rate limiting
+
+## Requirements
+
+- Python 3.8+
+- Playwright for browser automation
+- Windscribe VPN CLI installed (for IP rotation functionality)
+- PIL/Pillow for image processing
+
+## Setup
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Install Playwright browsers:
+   ```bash
+   python -m playwright install
+   ```
+4. Ensure Windscribe CLI is installed and configured (optional, for VPN rotation)
 
 ## Usage
 
-### Login
+Run the pipeline using the command-line interface:
 
-Login by explicitly providing your username & password or export environment
-variables `WINDSCRIBE_USER` and `WINDSCRIBE_PW`.
-
-```python
-import windscribe
-
-windscribe.login('<user>', '<password>')
+```bash
+python . --bib_numbers "12345,67890" --keyword "marathon"
 ```
 
-### Logout
+Options:
+- `--bib_numbers`: Comma-separated list of bib numbers to search for
+- `--keyword`: Keyword to search for events (e.g., "marathon", "race")
+- `--use_jquery`: Use alternative jQuery-based scraping (optional)
+- `--save_results`: Save raw metadata results to file (default: True)
 
-Logout from the Windscribe CLI.
+## Directory Structure
 
-```python
-windscribe.logout()
-```
+- `/core`: Core components of the pipeline
+- `/helpers`: Utility classes and functions
+- `/media`: Storage for downloaded and processed images
+  - `/media/raw`: Raw images before processing
+  - `/media/processed`: Images after watermark removal
+- `/logs`: Log files for debugging and monitoring
 
-### Get locations
+## Troubleshooting
 
-Returns a list of `WindscribeLocation` instances; each of which have the
-following attributes: `name`, `abbrev`, `city`, and `label`.
+- **Rate Limiting**: If you encounter frequent rate limits from dewatermark.ai, adjust the `max_requests_before_rotation` parameter in the Dewatermarker class
+- **Image Processing Errors**: Check `/logs/error.log` for detailed error information
+- **VPN Connection Issues**: Ensure Windscribe CLI is properly installed and authenticated
 
-```python
-location_list = windscribe.locations()
-```
+## License
 
-### Connect
-
-Connects to the best server by default.
-
-```python
-windscribe.connect()
-```
-
-**NOTE:** *Calling connect multiple times will just cause the VPN to reconnect
-to the specified location.*
-
-Connect to a random location:
-
-```python
-windscribe.random_connect()
-```
-
-Connect to a specific location using a string:
-
-**NOTE:** *You can use a given location's `name`, `abbrev`, `city`, `label` or `pro`.*
-
-```python
-windscribe.connect('BBQ')
-```
-
-Connect by passing in a `WindscribeLocation` instance:
-
-```python
-def get_barbecue():
-
-    for location in windscribe.locations():
-
-        if location.label == 'BBQ': return location
-
-bbq = get_barbecue()
-
-windscribe.connect(bbq)
-```
-
-### Disconnect
-
-Disconnect from the Windscribe server.
-
-```python
-windscribe.disconnect()
-```
-
-### Account Details
-
-Returns a `WindscribeAccount` instance which has the
-following attributes: `username`, `current_usage`, `current_usage_unit`, `max_usage`, `max_usage_unit`, and `plan`.
-
-```python
-windscribe.account()
-```
-
-### Version
-
-Gets the version of the Windscribe CLI.
-
-```python
-windscribe.version()
-```
-
-### Status
-
-Returns a `WindscribeStatus` instance which has the
-following attributes: `pid`, `status`, `uptime`, `cpu_usage`, `mem_usage`, `ip`, and `connected`.
-
-```python
-windscribe.status()
-```
-# image-scraper-automation
-This repo is for gathering media from geosnap and removing watermark using dewatermark ai
+For personal use only. This software is provided as-is with no warranty.
